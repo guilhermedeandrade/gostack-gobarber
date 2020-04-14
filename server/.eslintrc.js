@@ -19,6 +19,8 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', '],
-  rules: {},
+  plugins: ['@typescript-eslint'],
+  rules: {
+    '@typescript-eslint/camelcase': 'off',
+  },
 }
