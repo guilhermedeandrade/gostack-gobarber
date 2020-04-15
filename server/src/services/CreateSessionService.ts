@@ -3,7 +3,8 @@ import { compare } from 'bcryptjs'
 import { sign } from 'jsonwebtoken'
 
 import { User } from '../models'
-import authConfig from '../config/auth'
+import { authConfig } from '../config'
+import { AppError } from '../errors'
 
 interface Request {
   email: string
@@ -22,13 +23,13 @@ class CreateSessionService {
     const user = await usersRepository.findOne({ where: { email } })
 
     if (!user) {
-      throw new Error('Invalid email/password combination.')
+      throw new AppError('Invalid email/password combination.', 401)
     }
 
     const isPasswordCorrect = await compare(password, user.password)
 
     if (!isPasswordCorrect) {
-      throw new Error('Invalid email/password combination.')
+      throw new AppError('Invalid email/password combination.', 401)
     }
 
     const { secret, expiresIn } = authConfig.jwt

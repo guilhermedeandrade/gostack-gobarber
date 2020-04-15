@@ -3,6 +3,7 @@ import { getCustomRepository } from 'typeorm'
 
 import { Appointment } from '../models'
 import { AppointmentsRepository } from '../repositories'
+import { AppError } from '../errors'
 
 interface Request {
   provider_id: string
@@ -20,7 +21,7 @@ class CreateAppointmentService {
     )
 
     if (findAppointmentDateConflict) {
-      throw Error('This appointment is already booked')
+      throw new AppError('This appointment is already booked')
     }
 
     const appointment = appointmentsRepository.create({
