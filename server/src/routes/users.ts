@@ -10,19 +10,15 @@ const usersRouter = Router()
 const upload = multer(uploadConfig)
 
 usersRouter.post('/', async (req, res) => {
-  try {
-    const { name, email, password } = req.body
+  const { name, email, password } = req.body
 
-    const createUser = new CreateUserService()
+  const createUser = new CreateUserService()
 
-    const user = await createUser.execute({ name, email, password })
+  const user = await createUser.execute({ name, email, password })
 
-    const userWithoutPassword = omit(user, ['password'])
+  const userWithoutPassword = omit(user, ['password'])
 
-    return res.status(201).json(userWithoutPassword)
-  } catch (err) {
-    return res.status(400).json({ error: err.mesage })
-  }
+  return res.status(201).json(userWithoutPassword)
 })
 
 usersRouter.patch(
@@ -30,20 +26,16 @@ usersRouter.patch(
   ensureAuthenticated,
   upload.single('avatar'),
   async (req, res) => {
-    try {
-      const updateUserAvatar = new UpdateUserAvatarService()
+    const updateUserAvatar = new UpdateUserAvatarService()
 
-      const user = await updateUserAvatar.execute({
-        user_id: req.user.id,
-        avatarFilename: req.file.filename,
-      })
+    const user = await updateUserAvatar.execute({
+      user_id: req.user.id,
+      avatarFilename: req.file.filename,
+    })
 
-      const userWithoutPassword = omit(user, ['password'])
+    const userWithoutPassword = omit(user, ['password'])
 
-      return res.json(userWithoutPassword)
-    } catch (err) {
-      return res.status(400).json({ error: err.mesage })
-    }
+    return res.json(userWithoutPassword)
   },
 )
 
