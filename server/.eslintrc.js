@@ -2,6 +2,7 @@ module.exports = {
   env: {
     es6: true,
     node: true,
+    jest: true,
   },
   extends: [
     'eslint:recommended',
@@ -22,6 +23,10 @@ module.exports = {
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/interface-name-prefix': [
+      'error',
+      { prefixWithI: 'always' },
+    ],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
