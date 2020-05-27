@@ -5,7 +5,7 @@ import UpdateUserAvatarService from './UpdateUserAvatarService'
 
 import AppError from '@shared/errors/AppError'
 
-describe('CreateAppointmentService', () => {
+describe('UpdateUserAvatarService', () => {
   it("should be able to update a user's avatar", async () => {
     const fakeUsersRepository = new FakeUsersRepository()
     const fakeStorageProvider = new FakeStorageProvider()
@@ -40,7 +40,7 @@ describe('CreateAppointmentService', () => {
       fakeStorageProvider,
     )
 
-    expect(
+    await expect(
       updateUserAvatar.execute({
         user_id: 'nonexistent-id',
         avatarFilename: 'avatar.jpg',
