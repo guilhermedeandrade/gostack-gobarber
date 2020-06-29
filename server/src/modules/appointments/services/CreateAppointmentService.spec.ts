@@ -1,15 +1,23 @@
-import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository'
+import 'reflect-metadata'
+
 import CreateAppointmentService from './CreateAppointmentService'
+import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentsRepository'
+import FakeNotificationsRepoitory from '@modules/notifications/repositories/fakes/FakeNotificationsRepository'
 import AppError from '@shared/errors/AppError'
 
 let fakeAppointmentsRepository: FakeAppointmentsRepository
+let fakeNotificationsRepository: FakeNotificationsRepoitory
 let createAppointment: CreateAppointmentService
 
 describe('CreateAppointmentService', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository()
+    fakeNotificationsRepository = new FakeNotificationsRepoitory()
 
-    createAppointment = new CreateAppointmentService(fakeAppointmentsRepository)
+    createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+      fakeNotificationsRepository,
+    )
 
     jest
       .spyOn(Date, 'now')
