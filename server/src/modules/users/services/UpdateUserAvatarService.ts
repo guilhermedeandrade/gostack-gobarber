@@ -34,11 +34,11 @@ class UpdateUserAvatarService {
 
     const filename = await this.storageProvider.saveFile(avatarFilename)
 
-    const updatedUser = { ...user, avatar: filename }
+    user.avatar = filename
 
-    await this.usersRepository.save(updatedUser)
+    await this.usersRepository.save(user)
 
-    return updatedUser
+    return user
   }
 }
 

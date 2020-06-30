@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { omit } from 'remeda'
 import { container } from 'tsyringe'
+import { classToClass } from 'class-transformer'
 
 import CreateSessionService from '@modules/users/services/CreateSessionService'
 
@@ -12,9 +12,7 @@ class SessionsController {
 
     const { user, token } = await createSession.execute({ email, password })
 
-    const userWithoutPassword = omit(user, ['password'])
-
-    return response.json({ user: userWithoutPassword, token })
+    return response.json({ user: classToClass(user), token })
   }
 }
 

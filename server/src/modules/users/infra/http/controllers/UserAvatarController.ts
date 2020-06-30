@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { omit } from 'remeda'
 import { container } from 'tsyringe'
+import { classToClass } from 'class-transformer'
 
 import UpdateUserAvatarService from '@modules/users/services/UpdateUserAvatarService'
 
@@ -13,9 +13,7 @@ class UserAvatarController {
       avatarFilename: request.file.filename,
     })
 
-    const userWithoutPassword = omit(user, ['password'])
-
-    return response.json(userWithoutPassword)
+    return response.json(classToClass(user))
   }
 }
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { omit } from 'remeda'
 import { container } from 'tsyringe'
+import { classToClass } from 'class-transformer'
 
 import CreateUserService from '@modules/users/services/CreateUserService'
 
@@ -12,9 +12,7 @@ class UsersController {
 
     const user = await createUser.execute({ name, email, password })
 
-    const userWithoutPassword = omit(user, ['password'])
-
-    return response.status(201).json(userWithoutPassword)
+    return response.status(201).json(classToClass(user))
   }
 }
 
