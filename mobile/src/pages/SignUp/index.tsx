@@ -6,14 +6,17 @@ import {
   ScrollView,
   Platform,
   TextInput,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
+import * as Yup from 'yup';
 
+import api from '../../services/api';
+import getValidationErrors from '../../utils/getValidationErrors';
 import { Button, Input } from '../../components';
-
 import logoImg from '../../assets/logo.png';
 
 import {
@@ -23,6 +26,12 @@ import {
   BackToSignInButtonText,
 } from './styles';
 
+interface SignUpFormData {
+  name: string;
+  email: string;
+  password: string;
+}
+
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const emailInputRef = useRef<TextInput>(null);
@@ -30,8 +39,44 @@ const SignUp: React.FC = () => {
 
   const navigation = useNavigation();
 
-  const handleSignUp = useCallback((data: object) => {
-    console.log(data);
+  const handleSignUp = useCallback(async (data: SignUpFormData): Promise<
+    void
+  > => {
+    try {
+      formRef.current?.setErrors({});
+
+      const schema = Yup.object().shape({
+        name: Yup.string().required('Name is required'),
+        email: Yup.string()
+          .required('E-mail is required')
+          .email('Type a valid e-mail address'),
+        password: Yup.string().min(
+          6,
+          'The password must have at least 6 characters',
+        ),
+      });
+
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+
+      await api.post('/users', data);
+
+      Alert.alert('Signed up successfuly', 'You can go ahead and login');
+
+      navigation.goBack();
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err);
+
+        formRef.current?.setErrors(errors);
+      }
+
+      Alert.alert(
+        'Error on signing up',
+        'There was an error while signing up, try again',
+      );
+    }
   }, []);
 
   return (
