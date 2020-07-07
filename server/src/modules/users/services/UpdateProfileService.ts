@@ -43,11 +43,8 @@ class UpdateProfileService {
       throw new AppError('This e-mail is already being used')
     }
 
-    const updatedUser = {
-      ...user,
-      name,
-      email,
-    }
+    user.name = name
+    user.email = email
 
     if (password && !oldPassword) {
       throw new AppError(
@@ -67,12 +64,12 @@ class UpdateProfileService {
 
       const newPasswordHashed = await this.hashProvider.generateHash(password)
 
-      Object.assign(updatedUser, { password: newPasswordHashed })
+      Object.assign(user, { password: newPasswordHashed })
     }
 
-    await this.usersRepository.save(updatedUser)
+    await this.usersRepository.save(user)
 
-    return updatedUser
+    return user
   }
 }
 
