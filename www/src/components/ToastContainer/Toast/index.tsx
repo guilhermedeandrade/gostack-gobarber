@@ -1,39 +1,34 @@
-import React, { useEffect } from 'react';
-import {
-  FiAlertCircle,
-  FiXCircle,
-  FiInfo,
-  FiCheckCircle,
-} from 'react-icons/fi';
+import React, { useEffect } from 'react'
+import { FiAlertCircle, FiXCircle, FiInfo, FiCheckCircle } from 'react-icons/fi'
 
-import { Container } from './styles';
-import { useToast, ToastMessage } from '../../../hooks/toast';
+import { Container } from './styles'
+import { useToast, ToastMessage } from '../../../hooks/toast'
 
 interface ToastProps {
-  message: ToastMessage;
-  style: object;
+  message: ToastMessage
+  style: object
 }
 
 const ICONS_MAP = {
   info: <FiInfo size={24} />,
   error: <FiAlertCircle size={24} />,
   success: <FiCheckCircle size={24} />,
-};
+}
 
 const Toast: React.FC<ToastProps> = ({ message, style }) => {
-  const { removeToast } = useToast();
+  const { removeToast } = useToast()
 
-  const { description, type, title, id } = message;
+  const { description, type, title, id } = message
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      removeToast(id);
-    }, 3000);
+      removeToast(id)
+    }, 3000)
 
     return () => {
-      clearTimeout(timer);
-    };
-  }, [removeToast, id]);
+      clearTimeout(timer)
+    }
+  }, [removeToast, id])
 
   return (
     <Container hasDescription={Boolean(description)} type={type} style={style}>
@@ -49,7 +44,7 @@ const Toast: React.FC<ToastProps> = ({ message, style }) => {
         <FiXCircle size={18} />
       </button>
     </Container>
-  );
-};
+  )
+}
 
-export default Toast;
+export default Toast

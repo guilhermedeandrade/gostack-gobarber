@@ -1,15 +1,15 @@
-import React from 'react';
+import React from 'react'
 import {
   Route as ReactRouterDOMRoute,
   RouteProps as ReactRouterDOMRouteProps,
   Redirect,
-} from 'react-router-dom';
+} from 'react-router-dom'
 
-import { useAuth } from '../hooks/auth';
+import { useAuth } from '../hooks/auth'
 
 interface RouteProps extends ReactRouterDOMRouteProps {
-  isPrivate?: boolean;
-  component: React.ComponentType;
+  isPrivate?: boolean
+  component: React.ComponentType
 }
 
 const Route: React.FC<RouteProps> = ({
@@ -17,7 +17,7 @@ const Route: React.FC<RouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { user } = useAuth();
+  const { user } = useAuth()
 
   return (
     <ReactRouterDOMRoute
@@ -32,10 +32,10 @@ const Route: React.FC<RouteProps> = ({
               state: { from: location },
             }}
           />
-        );
+        )
       }}
     />
-  );
-};
+  )
+}
 
-export default Route;
+export default Route

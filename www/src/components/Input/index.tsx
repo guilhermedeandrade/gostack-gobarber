@@ -4,43 +4,43 @@ import React, {
   useEffect,
   useCallback,
   useState,
-} from 'react';
+} from 'react'
 
-import { IconBaseProps } from 'react-icons';
+import { IconBaseProps } from 'react-icons'
 
-import { Container, Error } from './styles';
-import { useField } from '@unform/core';
-import { FiAlertCircle } from 'react-icons/fi';
+import { Container, Error } from './styles'
+import { useField } from '@unform/core'
+import { FiAlertCircle } from 'react-icons/fi'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  name: string;
-  icon: React.ComponentType<IconBaseProps>;
+  name: string
+  icon: React.ComponentType<IconBaseProps>
 }
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
-  const [isFocused, setIsFocused] = useState(false);
-  const [isFilled, setIsFilled] = useState(false);
+  const [isFocused, setIsFocused] = useState(false)
+  const [isFilled, setIsFilled] = useState(false)
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const { fieldName, registerField, defaultValue, error } = useField(name);
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { fieldName, registerField, defaultValue, error } = useField(name)
 
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: inputRef.current,
       path: 'value',
-    });
-  }, [fieldName, inputRef, registerField]);
+    })
+  }, [fieldName, inputRef, registerField])
 
   const handleFocus = useCallback(() => {
-    setIsFocused(true);
-  }, []);
+    setIsFocused(true)
+  }, [])
 
   const handleBlur = useCallback(() => {
-    setIsFocused(false);
+    setIsFocused(false)
 
-    setIsFilled(Boolean(inputRef.current?.value));
-  }, []);
+    setIsFilled(Boolean(inputRef.current?.value))
+  }, [])
 
   return (
     <Container
@@ -63,7 +63,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
         </Error>
       )}
     </Container>
-  );
-};
+  )
+}
 
-export default Input;
+export default Input
