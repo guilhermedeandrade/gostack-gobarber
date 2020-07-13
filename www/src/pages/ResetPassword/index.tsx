@@ -56,8 +56,6 @@ const ResetPassword: React.FC = () => {
           throw new Error()
         }
 
-        console.log('location', location)
-
         await api.post('/password/reset', {
           password,
           // eslint-disable-next-line @typescript-eslint/camelcase
