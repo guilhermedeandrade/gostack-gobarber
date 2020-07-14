@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react'
 import {
   Image,
   View,
@@ -7,17 +7,17 @@ import {
   Platform,
   TextInput,
   Alert,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
-import { Form } from '@unform/mobile';
-import { FormHandles } from '@unform/core';
-import * as Yup from 'yup';
+} from 'react-native'
+import Icon from 'react-native-vector-icons/Feather'
+import { useNavigation } from '@react-navigation/native'
+import { Form } from '@unform/mobile'
+import { FormHandles } from '@unform/core'
+import * as Yup from 'yup'
 
-import { useAuth } from '../../hooks/auth';
-import getValidationErrors from '../../utils/getValidationErrors';
-import { Button, Input } from '../../components';
-import logoImg from '../../assets/logo.png';
+import { useAuth } from '../../hooks/auth'
+import getValidationErrors from '../../utils/getValidationErrors'
+import { Button, Input } from '../../components'
+import logoImg from '../../assets/logo.png'
 
 import {
   Container,
@@ -26,56 +26,56 @@ import {
   ForgotPasswordText,
   CreateAccountButton,
   CreateAccountButtonText,
-} from './styles';
+} from './styles'
 
 interface SignInFormData {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 const SignIn: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
-  const passwordInputRef = useRef<TextInput>(null);
+  const formRef = useRef<FormHandles>(null)
+  const passwordInputRef = useRef<TextInput>(null)
 
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
-  const { signIn } = useAuth();
+  const { signIn } = useAuth()
 
   const handleSignIn = useCallback(
     async (data: SignInFormData) => {
       try {
-        formRef.current?.setErrors({});
+        formRef.current?.setErrors({})
 
         const schema = Yup.object().shape({
           email: Yup.string()
             .required('E-mail is necessary')
             .email('Type a valid e-mail'),
           password: Yup.string().required('Password is necessary'),
-        });
+        })
 
         await schema.validate(data, {
           abortEarly: false,
-        });
+        })
 
         await signIn({
           email: data.email,
           password: data.password,
-        });
+        })
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(err);
+          const errors = getValidationErrors(err)
 
-          formRef.current?.setErrors(errors);
+          formRef.current?.setErrors(errors)
         }
 
         Alert.alert(
           'Authentication error',
           'There was an error during login, check the credentials',
-        );
+        )
       }
     },
     [signIn],
-  );
+  )
 
   return (
     <>
@@ -105,7 +105,7 @@ const SignIn: React.FC = () => {
                 icon="mail"
                 placeholder="E-mail"
                 onSubmitEditing={() => {
-                  passwordInputRef.current?.focus();
+                  passwordInputRef.current?.focus()
                 }}
               />
 
@@ -117,13 +117,13 @@ const SignIn: React.FC = () => {
                 icon="lock"
                 placeholder="Senha"
                 onSubmitEditing={() => {
-                  formRef.current?.submitForm();
+                  formRef.current?.submitForm()
                 }}
               />
 
               <Button
                 onPress={() => {
-                  formRef.current?.submitForm();
+                  formRef.current?.submitForm()
                 }}
               >
                 Entrar
@@ -132,7 +132,7 @@ const SignIn: React.FC = () => {
 
             <ForgotPassword
               onPress={() => {
-                console.log('dale');
+                console.log('forgot password link was clicked')
               }}
             >
               <ForgotPasswordText>Esqueci minha senha</ForgotPasswordText>
@@ -142,7 +142,7 @@ const SignIn: React.FC = () => {
       </KeyboardAvoidingView>
       <CreateAccountButton
         onPress={() => {
-          navigation.navigate('SignUp');
+          navigation.navigate('SignUp')
         }}
       >
         <Icon name="log-in" size={20} color="#ff9000" />
@@ -150,7 +150,7 @@ const SignIn: React.FC = () => {
         <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
       </CreateAccountButton>
     </>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

@@ -4,89 +4,100 @@ import React, {
   useState,
   useContext,
   useEffect,
-} from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+} from 'react'
+import AsyncStorage from '@react-native-community/async-storage'
 
-import api from '../services/api';
+import api from '../services/api'
+
+interface User {
+  id: string
+  name: string
+  email: string
+  avatar_url: string
+}
 
 interface AuthState {
-  token: string;
-  user: object;
+  token: string
+  user: User
 }
 
 interface SignInCredentials {
-  email: string;
-  password: string;
+  email: string
+  password: string
 }
 
 interface AuthContextData {
-  signIn: (credentials: SignInCredentials) => Promise<void>;
-  signOut: () => void;
-  user: object;
-  loading: boolean;
+  signIn: (credentials: SignInCredentials) => Promise<void>
+  signOut: () => void
+  user: User
+  loading: boolean
 }
 
-const AuthContext = createContext<AuthContextData>({} as AuthContextData);
+const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC = ({ children }) => {
-  const [data, setData] = useState<AuthState>({} as AuthState);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState<AuthState>({} as AuthState)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const loadStoredData = async (): Promise<void> => {
       const [token, user] = await AsyncStorage.multiGet([
         '@GoBarber:token',
         '@GoBarber:user',
-      ]);
+      ])
 
       if (token[1] && user[1]) {
+        api.defaults.headers.authorization = `Bearer ${token[1]}`
+
         setData({
           token: token[1],
           user: JSON.parse(user[1]),
-        });
+        })
       }
 
-      setLoading(false);
-    };
+      setLoading(false)
+    }
 
-    loadStoredData();
-  }, []);
+    loadStoredData()
+  }, [])
 
   const signIn = useCallback(async ({ email, password }) => {
     const response = await api.post<AuthState>('sessions', {
       email,
       password,
-    });
+    })
 
-    const { token, user } = response.data;
+    const { token, user } = response.data
 
     await AsyncStorage.multiSet([
       ['@GoBarber:token', token],
       ['@GoBarber:user', JSON.stringify(user)],
-    ]);
+    ])
 
-    setData({ token, user });
-  }, []);
+    api.defaults.headers.authorization = `Bearer ${token}`
+
+    setData({ token, user })
+  }, [])
 
   const signOut = useCallback(async () => {
-    await AsyncStorage.multiRemove(['@GoBarber:token', '@GoBarber:user']);
+    await AsyncStorage.multiRemove(['@GoBarber:token', '@GoBarber:user'])
 
-    setData({} as AuthState);
-  }, []);
+    setData({} as AuthState)
+  }, [])
 
   return (
     <AuthContext.Provider value={{ signIn, signOut, user: data.user, loading }}>
       {children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
 export function useAuth(): AuthContextData {
-  const context = useContext(AuthContext);
+  const context = useContext(AuthContext)
 
   if (!context) {
-    throw new Error('useAuth should be used within an AuthProvider');
+    throw new Error('useAuth should be used within an AuthProvider')
   }
 
-  return context;
+  return context
 }
