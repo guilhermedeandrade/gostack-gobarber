@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
       .catch(err => {
         throw new Error(err.message)
       })
-  })
+  }, [])
 
   const navigateToProfile = useCallback(() => {
     navigate('Profile')

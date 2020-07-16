@@ -1,5 +1,6 @@
-import React from 'react';
+import React from 'react'
+import { Text } from 'react-native'
 
-const AppointmentCreated: React.FC = () => <div>AppointmentCreated</div>;
+const AppointmentCreated: React.FC = () => <Text>AppointmentCreated</Text>
 
-export default AppointmentCreated;
+export default AppointmentCreated
