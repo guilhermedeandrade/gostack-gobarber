@@ -1,6 +1,7 @@
 module.exports = {
   env: {
     es6: true,
+    browser: true,
   },
   extends: [
     'plugin:react/recommended',
@@ -34,6 +35,7 @@ module.exports = {
       },
     ],
     'import/prefer-default-export': 'off',
+    'import/no-duplicates': 'off',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'react/prop-types': 'off',
     'react/jsx-props-no-spreading': 'off',
